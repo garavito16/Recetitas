@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recipes</title>
+</head>
+
+<body>
+    <div class="container">
+        <div class="row">
+            
+            {% if receta.id == 0: %}
+            <h2>Add new recipe</h2>
+            {% else: %}
+            <h2>Edit recipe</h2>
+            {% endif %}
+            <a href="/dashboard">Dashboard</a>
+            <a href="/logout">Cerrar sessión</a>
+        </div>
+        <div class="row">
+            <form action="/saveReceta" method="post">
+                {% with messages = get_flashed_messages(category_filter = ["receta"]) %}
+                {% if messages|length != 0: %}
+                <div>
+                    {% for message in messages: %}
+                    <p>{{message}}</p>
+                    {% endfor %}
+                </div>
+                {% endif %}
+                {% endwith %}
+                <div>
+                    <input type="hidden" id="identificador" name="identificador" value="{{receta.id}}">
+                </div>
+                <div>
+                    <div>
+                        <label for="name">Name</label>
+                        <input type="text" id="name" name="name" value="{{receta.nombre}}">
+                    </div>
+                    <div>
+                        <label for="description">Description</label>
+                        <textarea name="description" id="description" cols="30"
+                            rows="10">{{receta.descripcion}}</textarea>
+                    </div>
+                    <div>
+                        <label for="instructions">Instructions</label>
+                        <textarea name="instructions" id="instructions" cols="30"
+                            rows="10">{{receta.instrucciones}}</textarea>
+                    </div>
+                    <div>
+                        <label for="date_mode">Date mode on</label>
+                        <input type="date" name="date_mode" id="date_mode" value="{{receta.fecha}}">
+                    </div>
+                    <div>
+                        <label for="tiempo">Under 30 Minutes?</label>
+                        <div>
+                            <label for="tiempoY">Yes</label>
+                            <input checked type="radio" name="tiempo" id="tiempoY" value="Y">
+                        </div>
+                        <div>
+                            <label for="tiempoN">No</label>
+                            <input {% if receta.tiempo == 'NO': %} checked {% endif %} type="radio" name="tiempo"
+                                id="tiempoN" value="N">
+                        </div>
+                    </div>
+                    <div>
+                        {% if receta.id == 0: %}
+                        <button type="submit">Create</button>
+                        {% else: %}
+                        <button type="submit">Update</button>
+                        {% endif %}
+                    </div>
+            </form>
+        </div>
+    </div>
+</body>
+
+</html>
